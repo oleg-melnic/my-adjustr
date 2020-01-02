@@ -206,7 +206,7 @@
 
 @endsection
 
-@section('template_scripts')
+@push('js')
 
     {{-- Confirm Save Modal --}}
 
@@ -221,7 +221,6 @@
             $(this).find('.modal-footer #confirm').data('form', form);
         });
         $('#confirmSave').find('.modal-footer #confirm').on('click', function(){
-            debugger
             $(this).data('form').submit();
         });
 
@@ -243,4 +242,4 @@
     @if(config('laravelusers.tooltipsEnabled'))
         @include('laravelusers::scripts.tooltips')
     @endif
-@endsection
+@endpush

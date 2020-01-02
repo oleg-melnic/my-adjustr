@@ -2,11 +2,10 @@
 
 namespace App\Http\Controllers;
 
-use Auth;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
-use Illuminate\Routing\Controller;
-use Validator;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Validator;
 
 class UsersManagementController extends Controller
 {
@@ -86,6 +85,8 @@ class UsersManagementController extends Controller
      * @param \Illuminate\Http\Request $request
      *
      * @return \Illuminate\Http\Response
+     *
+     * @throws \Illuminate\Validation\ValidationException
      */
     public function store(Request $request)
     {
@@ -111,8 +112,8 @@ class UsersManagementController extends Controller
             'role.required'       => trans('laravelusers::laravelusers.messages.roleRequired'),
         ];
 
-        $validator = Validator::make($request->all(), $rules, $messages);
-
+        $validator = $this->validate($request, $rules, $messages);
+vred($validator);
         if ($validator->fails()) {
             return back()->withErrors($validator)->withInput();
         }
