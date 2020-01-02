@@ -1,12 +1,18 @@
 <?php
 
+use Illuminate\Foundation\Auth\User as Authenticatable;
+use Illuminate\Notifications\Notifiable;
+use jeremykenedy\LaravelRoles\Traits\HasRoleAndPermission;
 
 
 /**
  * Users
  */
-class Users
+class Users extends Authenticatable
 {
+    use Notifiable;
+    use HasRoleAndPermission;
+
     /**
      * @var int
      */

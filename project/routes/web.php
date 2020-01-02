@@ -49,7 +49,7 @@ Route::group(['middleware' => 'auth'], function () {
 });
 
 Route::group(['middleware' => 'auth'], function () {
-	Route::resource('user', 'UserController', ['except' => ['show']]);
+//	Route::resource('user', 'UserController', ['except' => ['show']]);
 	Route::get('profile', ['as' => 'profile.edit', 'uses' => 'ProfileController@edit']);
 	Route::put('profile', ['as' => 'profile.update', 'uses' => 'ProfileController@update']);
 	Route::put('profile/password', ['as' => 'profile.password', 'uses' => 'ProfileController@password']);
@@ -80,4 +80,21 @@ Route::group([
     Route::post('permissions-deleted-restore-all', 'LaravelpermissionsDeletedController@restoreAllDeletedPermissions')->name('permissions-deleted-restore-all');
     Route::delete('permissions-deleted-destroy-all', 'LaravelpermissionsDeletedController@destroyAllDeletedPermissions')->name('destroy-all-deleted-permissions');
     Route::delete('permission-destroy/{id}', 'LaravelpermissionsDeletedController@destroy')->name('permission-item-destroy');
+});
+
+// APP Routes Below
+Route::group([
+    'middleware' => 'web',
+//    'namespace' => 'jeremykenedy\laravelusers\app\Http\Controllers'
+], function () {
+    Route::resource('users', 'UsersManagementController', [
+        'names' => [
+            'index'   => 'users',
+            'destroy' => 'user.destroy',
+        ],
+    ]);
+});
+
+Route::middleware(['web', 'auth'])->group(function () {
+    Route::post('search-users', 'UsersManagementController@search')->name('search-users');
 });

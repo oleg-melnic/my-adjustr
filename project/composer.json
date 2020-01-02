@@ -9,8 +9,10 @@
     "license": "MIT",
     "require": {
         "php": "^7.2",
+        "barryvdh/laravel-debugbar": "^3.2",
         "fideloper/proxy": "^4.0",
         "jeremykenedy/laravel-roles": "^2.4",
+        "jeremykenedy/laravel-users": "^3.5",
         "laravel-doctrine/orm": "~1.5",
         "laravel-frontend-presets/material-dashboard": "^1.0",
         "laravel/framework": "^6.2",
@@ -45,7 +47,10 @@
     "autoload-dev": {
         "psr-4": {
             "Tests\\": "tests/"
-        }
+        },
+        "files": [
+            "app/Library/functions.php"
+        ]
     },
     "minimum-stability": "dev",
     "prefer-stable": true,
