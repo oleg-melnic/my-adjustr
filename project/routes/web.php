@@ -97,4 +97,22 @@ Route::group([
 
 Route::middleware(['web', 'auth'])->group(function () {
     Route::post('search-users', 'UsersManagementController@search')->name('search-users');
+
+    Route::get('admin/faq', 'Admin\FaqController@index')->name('faq-management');
+    Route::get('admin/faq/create', 'Admin\FaqController@createForm')->name('faq-create-management');
+    Route::post('admin/faq/create', 'Admin\FaqController@create')->name('faq-create');
+    Route::delete('admin/faq', 'Admin\FaqController@delete')->name('faq-destroy');
+    Route::put('admin/faq', 'Admin\FaqController@update')->name('faq-update');
+    Route::get('admin/faq/edit/{questionId}', 'Admin\FaqController@edit')
+        ->where('questionId', '[0-9]+')
+        ->name('faq-edit');
+
+    Route::get('admin/faq/category', 'Admin\FaqCategoryController@index')->name('faq-category-management');
+    Route::get('admin/faq/category/create', 'Admin\FaqCategoryController@createForm')->name('faq-category-create-management');
+    Route::post('admin/faq/category/create', 'Admin\FaqCategoryController@create')->name('faq-category-create');
+    Route::delete('admin/faq/category', 'Admin\FaqCategoryController@delete')->name('faq-category-destroy');
+    Route::put('admin/faq/category', 'Admin\FaqCategoryController@update')->name('faq-category-update');
+    Route::get('admin/faq/category/edit/{categoryId}', 'Admin\FaqCategoryController@edit')
+        ->where('categoryId', '[0-9]+')
+        ->name('faq-category-edit');
 });

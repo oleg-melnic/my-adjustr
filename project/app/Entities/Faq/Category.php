@@ -41,6 +41,14 @@ class Category implements CategoryInterface
      * @ORM\Column(name="alias", type="string", nullable=false)
      */
     private $alias;
+
+    /**
+     * @var bool
+     *
+     * @ORM\Column(name="lockalias", type="boolean", nullable=false)
+     */
+    private $lockalias;
+
     /**
      * @var string $title
      *
@@ -78,7 +86,7 @@ class Category implements CategoryInterface
     /**
      * @var integer
      *
-     * @ORM\Column(name="position", type="integer", nullable=false)
+     * @ORM\Column(name="position", type="integer", nullable=true, options={"default":"0"})
      */
     private $position;
 
@@ -97,18 +105,26 @@ class Category implements CategoryInterface
 
     /**
      * @param string $title
+     *
+     * @return Category
      */
     public function setTitle($title)
     {
         $this->title = $title;
+
+        return $this;
     }
 
     /**
      * @param string $seoDescription
+     *
+     * @return Category
      */
     public function setSeoDescription($seoDescription)
     {
         $this->seoDescription = $seoDescription;
+
+        return $this;
     }
 
     /**
@@ -121,10 +137,14 @@ class Category implements CategoryInterface
 
     /**
      * @param string $seoKeywords
+     *
+     * @return Category
      */
     public function setSeoKeywords($seoKeywords)
     {
         $this->seoKeywords = $seoKeywords;
+
+        return $this;
     }
 
     /**
@@ -137,10 +157,14 @@ class Category implements CategoryInterface
 
     /**
      * @param string $seoTitle
+     *
+     * @return Category
      */
     public function setSeoTitle($seoTitle)
     {
         $this->seoTitle = $seoTitle;
+
+        return $this;
     }
 
     /**
@@ -161,10 +185,14 @@ class Category implements CategoryInterface
 
     /**
      * @param string $text
+     *
+     * @return Category
      */
     public function setText($text)
     {
         $this->text = $text;
+
+        return $this;
     }
 
     /**
@@ -202,10 +230,14 @@ class Category implements CategoryInterface
 
     /**
      * @param int $position
+     *
+     * @return Category
      */
     public function setPosition($position)
     {
         $this->position = $position;
+
+        return $this;
     }
 
     /**
@@ -275,10 +307,14 @@ class Category implements CategoryInterface
 
     /**
      * @param string $alias
+     *
+     * @return Category
      */
     public function setAlias($alias)
     {
         $this->alias = $alias;
+
+        return $this;
     }
 
     /**
@@ -313,5 +349,25 @@ class Category implements CategoryInterface
         } else {
             return ($this->getIdentity() == $category->getIdentity());
         }
+    }
+
+    /**
+     * @return bool
+     */
+    public function isLockAlias(): bool
+    {
+        return $this->lockalias;
+    }
+
+    /**
+     * @param bool $lock
+     *
+     * @return Category
+     */
+    public function setLockAlias(bool $lock)
+    {
+        $this->lockalias = $lock;
+
+        return $this;
     }
 }
