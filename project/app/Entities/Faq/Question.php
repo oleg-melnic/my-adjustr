@@ -73,6 +73,13 @@ class Question implements QuestionInterface
 
     /**
      * @var bool
+     *
+     * @ORM\Column(name="lockalias", type="boolean", nullable=false)
+     */
+    private $lockalias;
+
+    /**
+     * @var bool
      */
     const DEFAULT_FAVORITE = false;
 
@@ -92,10 +99,14 @@ class Question implements QuestionInterface
 
     /**
      * @param string $title
+     *
+     * @return Question
      */
     public function setTitle($title)
     {
         $this->title = $title;
+
+        return $this;
     }
 
     /**
@@ -108,10 +119,14 @@ class Question implements QuestionInterface
 
     /**
      * @param string $answer
+     *
+     * @return Question
      */
     public function setAnswer($answer)
     {
         $this->answer = $answer;
+
+        return $this;
     }
 
     /**
@@ -132,10 +147,14 @@ class Question implements QuestionInterface
 
     /**
      * @param int $position
+     *
+     * @return Question
      */
     public function setPosition($position)
     {
         $this->position = $position;
+
+        return $this;
     }
 
     /**
@@ -148,19 +167,24 @@ class Question implements QuestionInterface
 
     /**
      * @param CategoryInterface $category
+     *
+     * @return Question|void
      */
     public function setCategory(CategoryInterface $category)
     {
         $prevCategory = $this->getCategory();
         if (!is_null($prevCategory) && $prevCategory->isEqual($category)) {
-            return;
+            return $this;
         }
+
         $this->category = $category;
 
         if (!is_null($prevCategory)) {
             $prevCategory->removeQuestion($this);
         }
         $category->addQuestion($this);
+
+        return $this;
     }
 
     /**
@@ -173,10 +197,14 @@ class Question implements QuestionInterface
 
     /**
      * @param bool $favorite
+     *
+     * @return Question
      */
     public function setIsFavorite($favorite)
     {
         $this->favorite = (bool)$favorite;
+
+        return $this;
     }
 
     /**
@@ -189,10 +217,14 @@ class Question implements QuestionInterface
 
     /**
      * @param string $alias
+     *
+     * @return Question
      */
     public function setAlias($alias)
     {
         $this->alias = $alias;
+
+        return $this;
     }
 
     /**
@@ -201,5 +233,25 @@ class Question implements QuestionInterface
     public function getAlias()
     {
         return $this->alias;
+    }
+
+    /**
+     * @return bool
+     */
+    public function isLockAlias(): bool
+    {
+        return $this->lockalias;
+    }
+
+    /**
+     * @param bool $lock
+     *
+     * @return Question
+     */
+    public function setLockAlias(bool $lock)
+    {
+        $this->lockalias = $lock;
+
+        return $this;
     }
 }
