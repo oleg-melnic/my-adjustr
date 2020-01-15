@@ -7,10 +7,10 @@
                         <img src="images/logo.png" height="50">
                     </li>
                     <li>
-                        <a href="">About</a>
+                        <a href="/about">About</a>
                     </li>
                     <li>
-                        <a href="">Blog</a>
+                        <a href="/blog">Blog</a>
                     </li>
                 </ul>
 
@@ -48,16 +48,16 @@
                         <h6><b>Support</b></h6>
                     </li>
                     <li>
-                        <a href="">Contact Us</a>
+                        <a href="/contact-us">Contact Us</a>
                     </li>
                     <li>
-                        <a href="">FAQ</a>
+                        <a href="/faq">FAQ</a>
                     </li>
                     <li>
-                        <a href="">Terms & Conditions</a>
+                        <a href="/terms">Terms & Conditions</a>
                     </li>
                     <li>
-                        <a href="">Privacy Policy</a>
+                        <a href="/policy">Privacy Policy</a>
                     </li>
                 </ul>
             </div>
