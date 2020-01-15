@@ -7,14 +7,14 @@ use App\Entities\Blog\Exception\CannotAddItem;
 interface CategoryInterface
 {
     /**
-     * @param ItemInterface $item
+     * @param PostInterface $post
      */
-    public function removeItem(ItemInterface $item);
+    public function removePost(PostInterface $post);
 
     /**
-     * @param ItemInterface $item
+     * @param PostInterface $post
      *
      * @throws CannotAddItem
      */
-    public function addItem(ItemInterface $item);
+    public function addPost(PostInterface $post);
 }

@@ -19,7 +19,7 @@
         </li>
         <li class="nav-item {{ ($activePage == 'faq-management' || $activePage == 'faq-category-management') ? ' active' : '' }}">
             <a class="nav-link" data-toggle="collapse" href="#faqSubmenu" aria-expanded="true">
-                <i><img style="width:25px" src="{{ asset('material') }}/img/laravel.svg"></i>
+                <i class="material-icons">help</i>
                 <p>{{ __('FAQ') }}
                     <b class="caret"></b>
                 </p>
@@ -34,6 +34,30 @@
                     </li>
                     <li class="nav-item{{ $activePage == 'faq-category-management' ? ' active' : '' }}">
                         <a class="nav-link" href="{{ route('faq-category-management') }}">
+                            <span class="sidebar-mini"> C </span>
+                            <span class="sidebar-normal">{{ __('Categories') }} </span>
+                        </a>
+                    </li>
+                </ul>
+            </div>
+        </li>
+        <li class="nav-item {{ ($activePage == 'blog-management' || $activePage == 'blog-category-management') ? ' active' : '' }}">
+            <a class="nav-link" data-toggle="collapse" href="#blogSubmenu" aria-expanded="true">
+                <i class="material-icons">list</i>
+                <p>{{ __('Blog') }}
+                    <b class="caret"></b>
+                </p>
+            </a>
+            <div class="collapse{{ ($activePage == 'blog-management' || $activePage == 'blog-category-management') ? ' show' : '' }}" id="blogSubmenu">
+                <ul class="nav">
+                    <li class="nav-item{{ $activePage == 'blog-management' ? ' active' : '' }}">
+                        <a class="nav-link" href="{{ route('blog-management') }}">
+                            <span class="sidebar-mini"> P </span>
+                            <span class="sidebar-normal">{{ __('Posts') }} </span>
+                        </a>
+                    </li>
+                    <li class="nav-item{{ $activePage == 'blog-category-management' ? ' active' : '' }}">
+                        <a class="nav-link" href="{{ route('blog-category-management') }}">
                             <span class="sidebar-mini"> C </span>
                             <span class="sidebar-normal">{{ __('Categories') }} </span>
                         </a>

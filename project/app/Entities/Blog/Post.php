@@ -8,9 +8,9 @@ use Doctrine\ORM\Mapping as ORM;
  * Item
  *
  * @ORM\Table(name="blog_items")
- * @ORM\Entity(repositoryClass="App\Repositories\Blog\Item")
+ * @ORM\Entity(repositoryClass="App\Repositories\Blog\Post")
  */
-class Item implements ItemInterface
+class Post implements PostInterface
 {
     /**
      * @var integer
@@ -24,14 +24,21 @@ class Item implements ItemInterface
     /**
      * @var string
      *
-     * @ORM\Column(name="alias", type="string", length=300, nullable=true)
+     * @ORM\Column(name="title", type="string", nullable=false)
+     */
+    private $title;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="alias", type="string", length=300, nullable=false)
      */
     private $alias;
 
     /**
      * @var integer
      *
-     * @ORM\Column(name="lock_alias", type="integer", nullable=true)
+     * @ORM\Column(name="lockalias", type="boolean", nullable=false)
      */
     private $lockAlias;
 
@@ -64,18 +71,11 @@ class Item implements ItemInterface
     private $createdBy;
 
     /**
-     * @var integer
+     * @var State
      *
-     * @ORM\Column(name="state", type="integer", nullable=true)
+     * @ORM\Embedded(class="App\Entities\Blog\State", columnPrefix = false)
      */
     private $state;
-
-    /**
-     * @var string
-     *
-     * @ORM\Column(name="name", type="string", length=300, nullable=true)
-     */
-    private $name;
 
     /**
      * @var string
@@ -94,10 +94,15 @@ class Item implements ItemInterface
     /**
      * @var \App\Entities\Blog\Category
      *
-     * @ORM\ManyToOne(targetEntity="App\Entities\Blog\Category", inversedBy="items")
+     * @ORM\ManyToOne(targetEntity="App\Entities\Blog\Category", inversedBy="posts")
      * @ORM\JoinColumn(name="category_id", referencedColumnName="id", nullable=false)
      */
     private $category;
+
+    public function __construct()
+    {
+        $this->createdDate = new \DateTime();
+    }
 
     /**
      * @return string
@@ -109,10 +114,14 @@ class Item implements ItemInterface
 
     /**
      * @param string $alias
+     *
+     * @return Post
      */
     public function setAlias($alias)
     {
         $this->alias = $alias;
+
+        return $this;
     }
 
     /**
@@ -125,10 +134,14 @@ class Item implements ItemInterface
 
     /**
      * @param string $anons
+     *
+     * @return Post
      */
     public function setAnons($anons)
     {
         $this->anons = $anons;
+
+        return $this;
     }
 
     /**
@@ -141,26 +154,34 @@ class Item implements ItemInterface
 
     /**
      * @param int $createdBy
+     *
+     * @return Post
      */
     public function setCreatedBy($createdBy)
     {
         $this->createdBy = $createdBy;
+
+        return $this;
     }
 
     /**
      * @return \DateTime
      */
-    public function getCreatedDate()
+    public function getCreateDate()
     {
         return $this->createdDate;
     }
 
     /**
      * @param \DateTime $createdDate
+     *
+     * @return Post
      */
     public function setCreatedDate(\DateTime $createdDate)
     {
         $this->createdDate = $createdDate;
+
+        return $this;
     }
 
     /**
@@ -174,33 +195,41 @@ class Item implements ItemInterface
     /**
      * @return int
      */
-    public function getLockAlias()
+    public function isLockAlias()
     {
         return $this->lockAlias;
     }
 
     /**
      * @param int $lockAlias
+     *
+     * @return Post
      */
     public function setLockAlias($lockAlias)
     {
         $this->lockAlias = $lockAlias;
+
+        return $this;
     }
 
     /**
      * @return string
      */
-    public function getName()
+    public function getTitle()
     {
-        return $this->name;
+        return $this->title;
     }
 
     /**
-     * @param string $name
+     * @param string $title
+     *
+     * @return Post
      */
-    public function setName($name)
+    public function setTitle($title)
     {
-        $this->name = $name;
+        $this->title = $title;
+
+        return $this;
     }
 
     /**
@@ -213,10 +242,14 @@ class Item implements ItemInterface
 
     /**
      * @param \DateTime $publicFrom
+     *
+     * @return Post
      */
     public function setPublicFrom(\DateTime $publicFrom)
     {
         $this->publicFrom = $publicFrom;
+
+        return $this;
     }
 
     /**
@@ -229,14 +262,18 @@ class Item implements ItemInterface
 
     /**
      * @param \DateTime $publicTo
+     *
+     * @return Post
      */
     public function setPublicTo(\DateTime $publicTo)
     {
         $this->publicTo = $publicTo;
+
+        return $this;
     }
 
     /**
-     * @return int
+     * @return State
      */
     public function getState()
     {
@@ -244,11 +281,23 @@ class Item implements ItemInterface
     }
 
     /**
-     * @param int $state
+     * @param State $state
+     *
+     * @return Post
      */
-    public function setState($state)
+    public function setState(State $state)
     {
         $this->state = $state;
+
+        return $this;
+    }
+
+    /**
+     * @return bool
+     */
+    public function isActive()
+    {
+        return $this->getState()->isActive();
     }
 
     /**
@@ -261,10 +310,14 @@ class Item implements ItemInterface
 
     /**
      * @param string $text
+     *
+     * @return Post
      */
     public function setText($text)
     {
         $this->text = $text;
+
+        return $this;
     }
 
     /**
@@ -277,18 +330,22 @@ class Item implements ItemInterface
 
     /**
      * @param CategoryInterface $category
+     *
+     * @return Post
      */
     public function setCategory(CategoryInterface $category)
     {
         $prevCategory = $this->getCategory();
         if (!is_null($prevCategory) && $prevCategory->isEqual($category)) {
-            return;
+            return $this;
         }
         $this->category = $category;
 
         if (!is_null($prevCategory)) {
-            $prevCategory->removeItem($this);
+            $prevCategory->removePost($this);
         }
-        $category->addItem($this);
+        $category->addPost($this);
+
+        return $this;
     }
 }

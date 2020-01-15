@@ -4,6 +4,7 @@ namespace App\Entities\Blog;
 
 use App\Entities\Blog\Exception\CannotAddItem;
 use App\Entities\Blog\Exception\CannotRemoveItem;
+use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\Common\Collections\Criteria;
 use Doctrine\Common\Collections\Selectable;
@@ -27,122 +28,251 @@ class Category implements CategoryInterface
      */
     private $identity;
 
-   /**
+    /**
+     * @var Collection|Selectable
+     *
+     * @ORM\OneToMany(targetEntity="Post", mappedBy="category")
+     */
+    private $posts;
+
+    /**
      * @var string
      *
-     * @ORM\Column(name="alias", type="string", length=300, nullable=true)
+     * @ORM\Column(name="alias", type="string", nullable=false)
      */
     private $alias;
 
     /**
-     * @var integer
+     * @var bool
      *
-     * @ORM\Column(name="lock_alias", type="integer", nullable=true)
+     * @ORM\Column(name="lockalias", type="boolean", nullable=false)
      */
-    private $lockAlias;
+    private $lockalias;
+
+    /**
+     * @var string $title
+     *
+     * @ORM\Column(name="title", type="string", nullable=false)
+     */
+    protected $title;
+
+    /**
+     * @var string $seoTitle
+     *
+     * @ORM\Column(name="seo_title", type="string", nullable=true)
+     */
+    protected $seoTitle;
+
+    /**
+     * @var string $seoDescription
+     *
+     * @ORM\Column(name="seo_description", type="string", nullable=true)
+     */
+    protected $seoDescription;
+
+    /**
+     * @var string $seoKeywords
+     *
+     * @ORM\Column(name="seo_keywords", type="string", nullable=true)
+     */
+    protected $seoKeywords;
+
+    /**
+     * @var string $text
+     * @ORM\Column(name="text", type="text", nullable=true)
+     */
+    protected $text;
 
     /**
      * @var integer
      *
-     * @ORM\Column(name="ord", type="integer", nullable=true)
+     * @ORM\Column(name="position", type="integer", nullable=true, options={"default":"0"})
      */
-    private $ord;
+    private $position;
 
-    /**
-     * @var integer
-     *
-     * @ORM\Column(name="state", type="integer", nullable=true)
-     */
-    private $state;
-
-    /**
-     * @var string
-     *
-     * @ORM\Column(name="name", type="string", length=300, nullable=true)
-     */
-    private $name;
-
-    /**
-     * @var Collection|Selectable
-     *
-     * @ORM\OneToMany(targetEntity="Item", mappedBy="category")
-     */
-    private $items;
+    public function __construct()
+    {
+        $this->posts = new ArrayCollection();
+    }
 
     /**
      * @return string
      */
-    public function getAlias()
+    public function getTitle()
     {
-        return $this->alias;
+        return $this->title;
     }
 
     /**
-     * @param string $alias
+     * @param string $title
+     *
+     * @return Category
      */
-    public function setAlias($alias)
+    public function setTitle($title)
     {
-        $this->alias = $alias;
+        $this->title = $title;
+
+        return $this;
     }
 
     /**
-     * @return Item[]
+     * @param string $seoDescription
+     *
+     * @return Category
      */
-    public function getItems()
+    public function setSeoDescription($seoDescription)
     {
-        $criteria = Criteria::create()
-            ->orderBy(array("position" => Criteria::ASC, "createDate" => Criteria::DESC));
-        return $this->items->matching($criteria)->toArray();
+        $this->seoDescription = $seoDescription;
+
+        return $this;
     }
 
     /**
-     * @param ItemInterface $item
-     * @throws CannotAddItem
+     * @return string
      */
-    public function addItem(ItemInterface $item)
+    public function getSeoDescription()
     {
-        if ($item->getCategory() != $this) {
-            $item->setCategory($this);
-            return;
-        }
-
-        if (!$this->hasItem($item)) {
-            $this->items->add($item);
-        }
+        return $this->seoDescription;
     }
 
     /**
-     * @param ItemInterface $item
+     * @param string $seoKeywords
+     *
+     * @return Category
+     */
+    public function setSeoKeywords($seoKeywords)
+    {
+        $this->seoKeywords = $seoKeywords;
+
+        return $this;
+    }
+
+    /**
+     * @return string
+     */
+    public function getSeoKeywords()
+    {
+        return $this->seoKeywords;
+    }
+
+    /**
+     * @param string $seoTitle
+     *
+     * @return Category
+     */
+    public function setSeoTitle($seoTitle)
+    {
+        $this->seoTitle = $seoTitle;
+
+        return $this;
+    }
+
+    /**
+     * @return string
+     */
+    public function getSeoTitle()
+    {
+        return $this->seoTitle;
+    }
+
+    /**
+     * @return string
+     */
+    public function getText()
+    {
+        return $this->text;
+    }
+
+    /**
+     * @param string $text
+     *
+     * @return Category
+     */
+    public function setText($text)
+    {
+        $this->text = $text;
+
+        return $this;
+    }
+
+    /**
+     * @param PostInterface $post
      *
      * @return bool
      */
-    public function hasItem(ItemInterface $item)
+    public function hasPost(PostInterface $post)
     {
-        return $this->items->contains($item);
+        return $this->posts->contains($post);
     }
 
     /**
      * @return int
      */
-    public function countItems()
+    public function countPosts()
     {
-        return $this->items->count();
+        return $this->posts->count();
     }
 
     /**
      * @return bool
      */
-    public function hasItems()
+    public function hasPosts()
     {
-        return !$this->items->isEmpty();
+        return !$this->posts->isEmpty();
     }
 
     /**
      * @return bool
      */
-    public function hasActiveItems()
+    public function hasActivePosts()
     {
-        return $this->hasItems();
+        return $this->hasPosts();
+    }
+
+    /**
+     * @param int $position
+     *
+     * @return Category
+     */
+    public function setPosition($position)
+    {
+        $this->position = $position;
+
+        return $this;
+    }
+
+    /**
+     * @return int
+     */
+    public function getPosition()
+    {
+        return $this->position;
+    }
+
+    /**
+     * @return Post[]
+     */
+    public function getPosts()
+    {
+        $criteria = Criteria::create()
+            ->orderBy(array("position" => Criteria::ASC, "createDate" => Criteria::DESC));
+        return $this->posts->matching($criteria)->toArray();
+    }
+
+    /**
+     * @param PostInterface $post
+     * @throws CannotAddItem
+     */
+    public function addPost(PostInterface $post)
+    {
+        if ($post->getCategory() != $this) {
+            $post->setCategory($this);
+            return;
+        }
+
+        if (!$this->hasPost($post)) {
+            $this->posts->add($post);
+        }
     }
 
     /**
@@ -154,82 +284,60 @@ class Category implements CategoryInterface
     }
 
     /**
-     * @param ItemInterface $item
+     * @param PostInterface $post
      * @throws Exception\CannotRemoveItem
      */
-    public function removeItem(ItemInterface $item)
+    public function removePost(PostInterface $post)
     {
-        if ($item->getCategory() == $this) {
-            throw new CannotRemoveItem('Cannot delete item directly');
+        if ($post->getCategory() == $this) {
+            throw new CannotRemoveItem('You cannot directly delete a post');
         }
 
-        if ($this->hasItem($item)) {
-            $this->items->removeElement($item);
+        if ($this->hasPost($post)) {
+            $this->posts->removeElement($post);
         }
-    }
-
-    /**
-     * @return int
-     */
-    public function getLockAlias()
-    {
-        return $this->lockAlias;
-    }
-
-    /**
-     * @param int $lockAlias
-     */
-    public function setLockAlias($lockAlias)
-    {
-        $this->lockAlias = $lockAlias;
     }
 
     /**
      * @return string
      */
-    public function getName()
+    public function getAlias()
     {
-        return $this->name;
+        return $this->alias;
     }
 
     /**
-     * @param string $name
+     * @param string $alias
+     *
+     * @return Category
      */
-    public function setName($name)
+    public function setAlias($alias)
     {
-        $this->name = $name;
+        $this->alias = $alias;
+
+        return $this;
     }
 
     /**
-     * @return int
+     * @internal param int|null $nrColumns - cols count
+     *
+     * @return \Doctrine\Common\Collections\Collection|static
      */
-    public function getOrd()
+    public function getFavoritePosts()
     {
-        return $this->ord;
+        $criteria = Criteria::create()
+            ->where(Criteria::expr()->eq("favorite", true))
+            ->orderBy(array("position" => Criteria::ASC, "createDate" => Criteria::DESC));
+        return $this->posts->matching($criteria);
     }
 
-    /**
-     * @param int $ord
-     */
-    public function setOrd($ord)
+    public function hasFavoritePosts()
     {
-        $this->ord = $ord;
-    }
-
-    /**
-     * @return int
-     */
-    public function getState()
-    {
-        return $this->state;
-    }
-
-    /**
-     * @param int $state
-     */
-    public function setState($state)
-    {
-        $this->state = $state;
+        $favorite = $this->getFavoritePosts();
+        if (!$favorite->isEmpty()) {
+            return true;
+        }
+        return false;
     }
 
     /**
@@ -243,5 +351,25 @@ class Category implements CategoryInterface
         } else {
             return ($this->getIdentity() == $category->getIdentity());
         }
+    }
+
+    /**
+     * @return bool
+     */
+    public function isLockAlias(): bool
+    {
+        return $this->lockalias;
+    }
+
+    /**
+     * @param bool $lock
+     *
+     * @return Category
+     */
+    public function setLockAlias(bool $lock)
+    {
+        $this->lockalias = $lock;
+
+        return $this;
     }
 }

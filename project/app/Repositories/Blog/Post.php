@@ -2,10 +2,14 @@
 
 namespace App\Repositories\Blog;
 
+use App\Repositories\Exception\DeletionFailed;
 use Doctrine\ORM\EntityRepository;
+use LaravelDoctrine\ORM\Pagination\PaginatesFromRequest;
 
-class Item extends EntityRepository
+class Post extends EntityRepository
 {
+    use PaginatesFromRequest;
+
     /**
      * @param \DateTime $from - Дата с
      * @param \DateTime $toInterval - Дата до
@@ -39,5 +43,28 @@ class Item extends EntityRepository
              ->setParameters(['ids' => $ids]);
 
         return $queryBuilder->getQuery()->getResult();
+    }
+
+    public function paginateAllItems($perPage = 15, $pageName = 'page')
+    {
+        return $this->paginateAll($perPage, $pageName);
+    }
+
+    /**
+     * @param int $itemId
+     */
+    public function delete($itemId)
+    {
+        try {
+            $entity = $this->find($itemId);
+            $this->getEntityManager()->remove($entity);
+            $this->getEntityManager()->flush();
+        } catch (\Exception $exception) {
+            throw new DeletionFailed(
+                sprintf('Item with id "%s" was not find', $itemId),
+                $exception->getCode(),
+                $exception
+            );
+        }
     }
 }
