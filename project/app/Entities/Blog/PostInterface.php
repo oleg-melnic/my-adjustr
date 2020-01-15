@@ -2,7 +2,7 @@
 
 namespace App\Entities\Blog;
 
-interface ItemInterface
+interface PostInterface
 {
     /**
      * @param CategoryInterface $category

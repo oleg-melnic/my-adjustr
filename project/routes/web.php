@@ -115,4 +115,22 @@ Route::middleware(['web', 'auth'])->group(function () {
     Route::get('admin/faq/category/edit/{categoryId}', 'Admin\FaqCategoryController@edit')
         ->where('categoryId', '[0-9]+')
         ->name('faq-category-edit');
+
+    Route::get('admin/blog', 'Admin\Blog\Controller@index')->name('blog-management');
+    Route::get('admin/blog/create', 'Admin\Blog\Controller@createForm')->name('blog-create-management');
+    Route::post('admin/blog/create', 'Admin\Blog\Controller@create')->name('blog-create');
+    Route::delete('admin/blog', 'Admin\Blog\Controller@delete')->name('blog-destroy');
+    Route::put('admin/blog', 'Admin\Blog\Controller@update')->name('blog-update');
+    Route::get('admin/blog/edit/{postId}', 'Admin\Blog\Controller@edit')
+        ->where('postId', '[0-9]+')
+        ->name('blog-edit');
+
+    Route::get('admin/blog/category', 'Admin\Blog\CategoryController@index')->name('blog-category-management');
+    Route::get('admin/blog/category/create', 'Admin\Blog\CategoryController@createForm')->name('blog-category-create-management');
+    Route::post('admin/blog/category/create', 'Admin\Blog\CategoryController@create')->name('blog-category-create');
+    Route::delete('admin/blog/category', 'Admin\Blog\CategoryController@delete')->name('blog-category-destroy');
+    Route::put('admin/blog/category', 'Admin\Blog\CategoryController@update')->name('blog-category-update');
+    Route::get('admin/blog/category/edit/{categoryId}', 'Admin\Blog\CategoryController@edit')
+        ->where('categoryId', '[0-9]+')
+        ->name('blog-category-edit');
 });
