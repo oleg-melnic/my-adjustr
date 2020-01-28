@@ -1,4 +1,4 @@
-@extends('frontend.app', ['activePage' => 'home', 'title' => __('My Adjustr')])
+@extends('frontend.app', ['activePage' => 'main', 'title' => __('My Adjustr')])
 
 @section('content')
     <section class="first-page" id="sec1">

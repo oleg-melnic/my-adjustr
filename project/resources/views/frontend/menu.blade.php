@@ -10,16 +10,16 @@
             <div class="collapse navbar-collapse justify-content-end" id="navbarSupportedContent">
                 <ul class="navbar-nav text-xs-center text-sm-center">
                     <li class="nav-item">
-                        <a class="nav-link active" href="#">Home</a>
+                        <a class="nav-link{{ ($activePage == 'main') ? ' active' : '' }}" href="/">Home</a>
                     </li>
                     <li class="nav-item">
                         <a class="nav-link" href="#">How it works</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="#">Join as a Pro</a>
+                        <a class="nav-link{{ ($activePage == 'register') ? ' active' : '' }}" href="{{ route('register') }}">Join as a Pro</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="#">Log in</a>
+                        <a class="nav-link{{ ($activePage == 'login') ? ' active' : '' }}" href="{{ route('login') }}">Log in</a>
                     </li>
                 </ul>
             </div>
