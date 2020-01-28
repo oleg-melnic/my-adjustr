@@ -1,91 +1,88 @@
-@extends('layouts.app', ['class' => 'off-canvas-sidebar', 'activePage' => 'login', 'title' => __('My Adjustr')])
+@extends('frontend.app', ['activePage' => 'login', 'title' => __('My Adjustr')])
 
 @section('content')
-<div class="container" style="height: auto;">
-  <div class="row align-items-center">
-    <div class="col-md-9 ml-auto mr-auto mb-3 text-center">
-      <h3>{{ __('Log in to see more...') }} </h3>
-    </div>
-    <div class="col-lg-4 col-md-6 col-sm-8 ml-auto mr-auto">
-      <form class="form" method="POST" action="{{ route('login') }}">
-        @csrf
+    <section id="sec1">
+        <div class="container">
+            <div class="row">
+                <div class="col text-center">
+                    <h1>Welcome Back</h1>
+                    <hr class="blue-line">
+                </div>
+            </div>
+            <form class="form-login" method="POST" action="{{ route('login') }}">
+                @csrf
 
-        <div class="card card-login card-hidden mb-3">
-          <div class="card-header card-header-primary text-center">
-            <h4 class="card-title"><strong>{{ __('Login') }}</strong></h4>
-            <div class="social-line">
-              <a href="#pablo" class="btn btn-just-icon btn-link btn-white">
-                <i class="fa fa-facebook-square"></i>
-              </a>
-              <a href="#pablo" class="btn btn-just-icon btn-link btn-white">
-                <i class="fa fa-twitter"></i>
-              </a>
-              <a href="#pablo" class="btn btn-just-icon btn-link btn-white">
-                <i class="fa fa-google-plus"></i>
-              </a>
-            </div>
-          </div>
-          <div class="card-body">
-            <p class="card-description text-center">{{ __('Or Sign in with ') }} <strong>admin@material.com</strong> {{ __(' and the password ') }}<strong>secret</strong> </p>
-            <div class="bmd-form-group{{ $errors->has('email') ? ' has-danger' : '' }}">
-              <div class="input-group">
-                <div class="input-group-prepend">
-                  <span class="input-group-text">
-                    <i class="material-icons">email</i>
-                  </span>
+                <div class="row justify-content-center{{ $errors->has('email') ? ' has-danger' : '' }}">
+                    <div class="col-md-6 col-sm-12">
+                        <div class="form-group">
+                            <label for="exampleInputEmail1">{{ __('Email') }}</label>
+                            <input type="email" name="email" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp" placeholder="{{ __('Email...') }}" value="{{ old('email', 'admin@material.com') }}" required>
+                        </div>
+                        @if ($errors->has('email'))
+                            <div id="email-error" class="error text-danger pl-3" for="email" style="display: block;">
+                                <strong>{{ $errors->first('email') }}</strong>
+                            </div>
+                        @endif
+                    </div>
                 </div>
-                <input type="email" name="email" class="form-control" placeholder="{{ __('Email...') }}" value="{{ old('email', 'admin@material.com') }}" required>
-              </div>
-              @if ($errors->has('email'))
-                <div id="email-error" class="error text-danger pl-3" for="email" style="display: block;">
-                  <strong>{{ $errors->first('email') }}</strong>
+
+                <div class="row justify-content-center{{ $errors->has('password') ? ' has-danger' : '' }}">
+                    <div class="col-md-6 col-sm-12">
+                        <div class="form-group">
+                            <label for="exampleInputEmail1">{{ __('Password') }}</label>
+                            <input type="password" id="exampleInputEmail1" aria-describedby="emailHelp" name="password" class="form-control" placeholder="{{ __('Password...') }}" value="{{ !$errors->has('password') ? "secret" : "" }}" required>
+                        </div>
+                        @if ($errors->has('password'))
+                            <div id="password-error" class="error text-danger pl-3" for="password" style="display: block;">
+                                <strong>{{ $errors->first('password') }}</strong>
+                            </div>
+                        @endif
+                    </div>
                 </div>
-              @endif
-            </div>
-            <div class="bmd-form-group{{ $errors->has('password') ? ' has-danger' : '' }} mt-3">
-              <div class="input-group">
-                <div class="input-group-prepend">
-                  <span class="input-group-text">
-                    <i class="material-icons">lock_outline</i>
-                  </span>
+
+                <div class="row mt-4 text-center">
+                    <div class="col">
+                        <button type="submit" class="btn btn-primary">{{ __('Login') }}</button>
+                    </div>
                 </div>
-                <input type="password" name="password" id="password" class="form-control" placeholder="{{ __('Password...') }}" value="{{ !$errors->has('password') ? "secret" : "" }}" required>
-              </div>
-              @if ($errors->has('password'))
-                <div id="password-error" class="error text-danger pl-3" for="password" style="display: block;">
-                  <strong>{{ $errors->first('password') }}</strong>
+
+                <div class="row mt-4 text-center">
+                    <div class="col">
+                        @if (Route::has('password.request'))
+                            <a href="{{ route('password.request') }}">
+                                <small>{{ __('Forgot password?') }}</small>
+                            </a>
+                        @endif
+                    </div>
                 </div>
-              @endif
-            </div>
-            <div class="form-check mr-auto ml-3 mt-3">
-              <label class="form-check-label">
-                <input class="form-check-input" type="checkbox" name="remember" {{ old('remember') ? 'checked' : '' }}> {{ __('Remember me') }}
-                <span class="form-check-sign">
-                  <span class="check"></span>
-                </span>
-              </label>
-            </div>
-          </div>
-          <div class="card-footer justify-content-center">
-            <button type="submit" class="btn btn-primary btn-link btn-lg">{{ __('Lets Go') }}</button>
-          </div>
+
+                <div class="row mt-4">
+                    <div class="col text-right"><hr class="form-blue-line d-inline-block"></div>
+                    <div class="col-auto"><span class="align-mid align-middle">or</span></div>
+                    <div class="col text-left"><hr class="form-blue-line d-inline-block"></div>
+                </div>
+
+                <div class="row mt-4 text-center">
+                    <div class="col ">
+                        <button type="submit" class="btn btn-primary">Log In with Facebook  <i class="ml-1 fab fa-facebook-f"></i></button>
+                    </div>
+                </div>
+
+                <div class="row mt-3 text-center">
+                    <div class="col">
+                        <button type="submit" class="btn btn-primary">Log In with Google <i class="ml-1 fab fa-google"></i></button>
+                        <p class="mt-4">By clicking Create Account you agree to the Terms of Use and Privacy Policy</p>
+                    </div>
+                </div>
+
+                <div class="row mt-5 mb-5 text-center">
+                    <div class="col">
+                        <a class="mr-3" href="{{ route('register') }}">Don’t have an account? </a>
+                        <a href="{{ route('register') }}"><b>Sign Up</b></a>
+                    </div>
+                </div>
+
+            </form>
         </div>
-      </form>
-      <div class="row">
-        <div class="col-6">
-            @if (Route::has('password.request'))
-                <a href="{{ route('password.request') }}" class="text-light">
-                    <small>{{ __('Forgot password?') }}</small>
-                </a>
-            @endif
-        </div>
-        <div class="col-6 text-right">
-            <a href="{{ route('register') }}" class="text-light">
-                <small>{{ __('Create new account') }}</small>
-            </a>
-        </div>
-      </div>
-    </div>
-  </div>
-</div>
+    </section>
 @endsection

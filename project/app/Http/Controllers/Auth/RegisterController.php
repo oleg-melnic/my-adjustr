@@ -2,10 +2,10 @@
 
 namespace App\Http\Controllers\Auth;
 
+use App\Entities\Users;
 use App\Http\Controllers\Controller;
-use App\User;
+use App\Services\UsersService;
 use Illuminate\Foundation\Auth\RegistersUsers;
-use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
 
 class RegisterController extends Controller
@@ -31,42 +31,42 @@ class RegisterController extends Controller
     protected $redirectTo = '/home';
 
     /**
-     * Create a new controller instance.
-     *
-     * @return void
+     * @var UsersService
      */
-    public function __construct()
+    private $service;
+
+    /**
+     * @param UsersService $service
+     */
+    public function __construct(UsersService $service)
     {
         $this->middleware('guest');
+        $this->service = $service;
     }
 
     /**
      * Get a validator for an incoming registration request.
      *
      * @param  array  $data
+     *
      * @return \Illuminate\Contracts\Validation\Validator
      */
     protected function validator(array $data)
     {
         return Validator::make($data, [
             'name' => ['required', 'string', 'max:255'],
-            'email' => ['required', 'string', 'email', 'max:255', 'unique:users'],
+            'email' => ['required', 'string', 'email', 'max:255', 'unique:App\Entities\Users'],
             'password' => ['required', 'string', 'min:8', 'confirmed'],
         ]);
     }
 
     /**
-     * Create a new user instance after a valid registration.
-     *
      * @param  array  $data
-     * @return \App\User
+     *
+     * @return Users
      */
     protected function create(array $data)
     {
-        return User::create([
-            'name' => $data['name'],
-            'email' => $data['email'],
-            'password' => Hash::make($data['password']),
-        ]);
+        return $this->service->create($data);
     }
 }
