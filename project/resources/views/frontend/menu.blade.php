@@ -13,7 +13,7 @@
                         <a class="nav-link{{ ($activePage == 'main') ? ' active' : '' }}" href="/">Home</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="#">How it works</a>
+                        <a class="nav-link{{ ($activePage == 'how-it-works') ? ' active' : '' }}" href="{{ route('how-it-works') }}">How it works</a>
                     </li>
                     <li class="nav-item">
                         <a class="nav-link{{ ($activePage == 'register') ? ' active' : '' }}" href="{{ route('register') }}">Join as a Pro</a>

@@ -7,7 +7,7 @@
                         <img src="images/logo.png" height="50">
                     </li>
                     <li>
-                        <a href="/about">About</a>
+                        <a href="{{ route('about') }}">About</a>
                     </li>
                     <li>
                         <a href="/blog">Blog</a>
@@ -22,10 +22,10 @@
                         <h6><b>Homeowners</b></h6>
                     </li>
                     <li>
-                        <a href="">How It Works</a>
+                        <a href="{{ route('how-it-works') }}">How It Works</a>
                     </li>
                     <li>
-                        <a href="">Services & Fees</a>
+                        <a href="{{ route('services') }}">Services & Fees</a>
                     </li>
                 </ul>
             </div>
@@ -35,10 +35,10 @@
                         <h6><b>Professionals</b></h6>
                     </li>
                     <li>
-                        <a href="">Join as a professional</a>
+                        <a href="{{ route('register') }}">Join as a professional</a>
                     </li>
                     <li>
-                        <a href="">Pricing</a>
+                        <a href="{{ route('prices') }}">Pricing</a>
                     </li>
                 </ul>
             </div>
@@ -48,16 +48,16 @@
                         <h6><b>Support</b></h6>
                     </li>
                     <li>
-                        <a href="/contact-us">Contact Us</a>
+                        <a href="{{ route('contact') }}">Contact Us</a>
                     </li>
                     <li>
                         <a href="/faq">FAQ</a>
                     </li>
                     <li>
-                        <a href="/terms">Terms & Conditions</a>
+                        <a href="{{ route('terms') }}">Terms & Conditions</a>
                     </li>
                     <li>
-                        <a href="/policy">Privacy Policy</a>
+                        <a href="{{ route('policy') }}">Privacy Policy</a>
                     </li>
                 </ul>
             </div>
