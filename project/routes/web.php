@@ -44,6 +44,9 @@ Route::get('/policy', function () {
     return view('pages.privacy');
 })->name('policy');
 
+Route::get('/redirect/{provider}', 'Auth\SocialController@redirect');
+Route::get('/callback/{provider}', 'Auth\SocialController@callback');
+
 Route::group(['middleware' => 'auth'], function () {
 	Route::get('table-list', function () {
 		return view('pages.table_list');

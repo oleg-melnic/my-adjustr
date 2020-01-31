@@ -64,13 +64,13 @@
 
                 <div class="row mt-4 text-center">
                     <div class="col ">
-                        <button type="submit" class="btn btn-primary">Log In with Facebook  <i class="ml-1 fab fa-facebook-f"></i></button>
+                        <button type="button" onclick="window.location='/redirect/facebook'" class="btn btn-primary">Log In with Facebook  <i class="ml-1 fab fa-facebook-f"></i></button>
                     </div>
                 </div>
 
                 <div class="row mt-3 text-center">
                     <div class="col">
-                        <button type="submit" class="btn btn-primary">Log In with Google <i class="ml-1 fab fa-google"></i></button>
+                        <button type="button" onclick="window.location='/redirect/google'" class="btn btn-primary">Log In with Google <i class="ml-1 fab fa-google"></i></button>
                         <p class="mt-4">By clicking Create Account you agree to the Terms of Use and Privacy Policy</p>
                     </div>
                 </div>

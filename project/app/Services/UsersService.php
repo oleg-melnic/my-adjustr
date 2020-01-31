@@ -4,6 +4,7 @@ namespace App\Services;
 
 use App\Entities\Users;
 use App\Repositories\Exception\EntityNotFound;
+use App\User;
 use Illuminate\Http\Request;
 use Illuminate\Pagination\LengthAwarePaginator;
 use Illuminate\Support\Facades\Hash;
@@ -48,6 +49,26 @@ class UsersService
     public function get($itemId)
     {
         return $this->repository->find($itemId);
+    }
+
+    /**
+     * @param object $socialUser
+     *
+     * @return Users|null
+     */
+    public function getOrCreate(object $socialUser)
+    {
+        $user = User::whereEmail($socialUser->getEmail())->first();
+
+        if (!$user) {
+            $user = User::create([
+                'email' => $socialUser->getEmail(),
+                'name' => $socialUser->getName(),
+                'password' => Hash::make(''),
+            ]);
+        }
+
+        return $user;
     }
 
     /**
