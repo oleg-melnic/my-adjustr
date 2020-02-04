@@ -2,16 +2,22 @@
 
 namespace App\Http\Controllers;
 
+use App\Services\ClaimService;
+
 class HomeController extends Controller
 {
+    /** @var ClaimService */
+    private $claimService;
+
     /**
      * Create a new controller instance.
      *
      * @return void
      */
-    public function __construct()
+    public function __construct(ClaimService $claimService)
     {
         $this->middleware('auth');
+        $this->claimService = $claimService;
     }
 
     /**
@@ -21,6 +27,6 @@ class HomeController extends Controller
      */
     public function index()
     {
-        return view('dashboard');
+        return view('dashboard', ['data' => $this->claimService->getList()]);
     }
 }

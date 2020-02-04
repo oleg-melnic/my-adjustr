@@ -85,6 +85,12 @@ class Users extends Authenticatable
      */
     private $updatedAt;
 
+    /**
+     * @var boolean
+     *
+     * @ORM\Column(name="subscription", type="boolean", nullable=false, options={"default":"0"})
+     */
+    private $subscription;
 
     /**
      * Get id.
@@ -262,5 +268,25 @@ class Users extends Authenticatable
     public function getUpdatedAt()
     {
         return $this->updatedAt;
+    }
+
+    /**
+     * @return bool
+     */
+    public function isSubscription(): bool
+    {
+        return $this->subscription;
+    }
+
+    /**
+     * @param bool $subscription
+     *
+     * @return Users
+     */
+    public function setSubscription(bool $subscription): Users
+    {
+        $this->subscription = $subscription;
+
+        return $this;
     }
 }
