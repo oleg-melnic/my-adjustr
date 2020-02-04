@@ -75,6 +75,16 @@ Route::group(['middleware' => 'auth'], function () {
 	Route::get('upgrade', function () {
 		return view('pages.upgrade');
 	})->name('upgrade');
+
+	Route::get('claims/create', function () {
+		return view('claims.create');
+	})->name('claims.create');
+    Route::post('claims/create', 'ClaimController@create')->name('claims-create');
+    Route::delete('claims', 'ClaimController@delete')->name('claims-destroy');
+    Route::put('claims', 'ClaimController@update')->name('claims-update');
+    Route::get('claims/edit/{itemId}', 'ClaimController@edit')
+        ->where('itemId', '[0-9]+')
+        ->name('claims-edit');
 });
 
 Route::group(['middleware' => 'auth'], function () {
