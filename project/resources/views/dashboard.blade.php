@@ -19,6 +19,7 @@
                   <th>Insurance Provider</th>
                   <th>Type of property</th>
                   <th>Type of damages sustained</th>
+                  <th>Professional</th>
                   <th>Created Date</th>
                   <th>State</th>
                   <th class="text-right">Actions</th>
@@ -30,14 +31,20 @@
                         <td>{{ $item->getProvider() }}</td>
                         <td>{{ $item->getProperty() }}</td>
                         <td>{{ $item->getDamages() }}</td>
+                        <td>@if ($item->getProfessional()) {{ $item->getProfessional()->getName() }} @else - @endif</td>
                         <td>{{ $item->getCreateDate()->format('m/d/Y') }}</td>
                         <td>{{ $item->getState()->getName() }}</td>
                         <td class="td-actions text-right">
+                            @role('admin')
                             <button type="button" onclick="window.location='{{ route('claims-edit', ['itemId' => $item->getIdentity()]) }}'" rel="tooltip" title="Edit Claim" class="btn btn-primary btn-link btn-sm">
                               <i class="material-icons">edit</i>
                             </button>
                             <button type="button" rel="tooltip" title="Remove" class="btn btn-danger btn-link btn-sm">
                               <i class="material-icons">close</i>
+                            </button>
+                            @endrole
+                            <button type="button" onclick="window.location='{{ route('claims-show', ['itemId' => $item->getIdentity()]) }}'" rel="tooltip" title="Show Claim" class="btn btn-primary btn-link btn-sm">
+                                <i class="material-icons">visibility</i>
                             </button>
                         </td>
                       </tr>

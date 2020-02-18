@@ -1,12 +1,10 @@
 <?php
 
-namespace App\Entities;
+namespace App\Entities\User;
 
 use Doctrine\ORM\Mapping as ORM;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
-use jeremykenedy\LaravelRoles\Traits\HasRoleAndPermission;
-
 
 /**
  * Users
@@ -20,9 +18,12 @@ use jeremykenedy\LaravelRoles\Traits\HasRoleAndPermission;
  *         )
  *     }
  * )
- * @ORM\Entity(repositoryClass="App\Repositories\Users")
+ * @ORM\Entity(repositoryClass="App\Repositories\User\Users")
+ * @ORM\InheritanceType("SINGLE_TABLE")
+ * @ORM\DiscriminatorColumn(name="type", type="string")
+ * @ORM\DiscriminatorMap({"admin" = "Admin", "homeowner" = "Homeowner", "professional" = "Professional"})
  */
-class Users extends Authenticatable
+abstract class UserAbstract extends Authenticatable
 {
     use Notifiable;
     use HasRoleAndPermission;
@@ -93,11 +94,21 @@ class Users extends Authenticatable
     private $subscription;
 
     /**
+     * @var Role
+     * @ORM\ManyToMany(targetEntity="Role")
+     * @ORM\JoinTable(name="role_user",
+     *      joinColumns={@ORM\JoinColumn(name="user_id", referencedColumnName="id")},
+     *      inverseJoinColumns={@ORM\JoinColumn(name="role_id", referencedColumnName="id")}
+     * )
+     */
+    private $role;
+
+    /**
      * Get id.
      *
      * @return int
      */
-    public function getId()
+    public function getIdentity()
     {
         return $this->id;
     }
@@ -107,7 +118,7 @@ class Users extends Authenticatable
      *
      * @param string $name
      *
-     * @return Users
+     * @return UserAbstract
      */
     public function setName($name)
     {
@@ -131,7 +142,7 @@ class Users extends Authenticatable
      *
      * @param string $email
      *
-     * @return Users
+     * @return UserAbstract
      */
     public function setEmail($email)
     {
@@ -155,7 +166,7 @@ class Users extends Authenticatable
      *
      * @param \DateTime|null $emailVerifiedAt
      *
-     * @return Users
+     * @return UserAbstract
      */
     public function setEmailVerifiedAt($emailVerifiedAt = null)
     {
@@ -179,7 +190,7 @@ class Users extends Authenticatable
      *
      * @param string $password
      *
-     * @return Users
+     * @return UserAbstract
      */
     public function setPassword($password)
     {
@@ -203,7 +214,7 @@ class Users extends Authenticatable
      *
      * @param string|null $rememberToken
      *
-     * @return Users
+     * @return UserAbstract
      */
     public function setRememberToken($rememberToken = null)
     {
@@ -227,7 +238,7 @@ class Users extends Authenticatable
      *
      * @param \DateTime|null $createdAt
      *
-     * @return Users
+     * @return UserAbstract
      */
     public function setCreatedAt($createdAt = null)
     {
@@ -251,7 +262,7 @@ class Users extends Authenticatable
      *
      * @param \DateTime|null $updatedAt
      *
-     * @return Users
+     * @return UserAbstract
      */
     public function setUpdatedAt($updatedAt = null)
     {
@@ -281,11 +292,31 @@ class Users extends Authenticatable
     /**
      * @param bool $subscription
      *
-     * @return Users
+     * @return UserAbstract
      */
-    public function setSubscription(bool $subscription): Users
+    public function setSubscription(bool $subscription): UserAbstract
     {
         $this->subscription = $subscription;
+
+        return $this;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getRole()
+    {
+        return $this->role;
+    }
+
+    /**
+     * @param mixed $role
+     *
+     * @return UserAbstract
+     */
+    public function setRole($role): UserAbstract
+    {
+        $this->role = $role;
 
         return $this;
     }

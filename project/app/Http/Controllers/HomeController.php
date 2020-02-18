@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers;
 
-use App\Services\ClaimService;
+use App\Services\Claim\ClaimService;
 
 class HomeController extends Controller
 {

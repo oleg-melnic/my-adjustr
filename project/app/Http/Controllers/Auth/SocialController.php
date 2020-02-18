@@ -3,18 +3,18 @@
 namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
-use App\Services\UsersService;
+use App\Services\User\UserService;
 use Illuminate\Http\RedirectResponse;
 use Socialite;
 
 class SocialController extends Controller
 {
     /**
-     * @var UsersService
+     * @var UserService
      */
     private $service;
 
-    public function __construct(UsersService $service)
+    public function __construct(UserService $service)
     {
         $this->service = $service;
     }

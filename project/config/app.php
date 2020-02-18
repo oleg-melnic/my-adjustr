@@ -167,6 +167,8 @@ return [
          */
         LaravelDoctrine\Migrations\MigrationsServiceProvider::class,
         Laravel\Socialite\SocialiteServiceProvider::class,
+        Dlnsk\HierarchicalRBAC\HRBACServiceProvider::class,
+        jeremykenedy\LaravelRoles\RolesServiceProvider::class,
 
         /*
          * Application Service Providers...
@@ -177,6 +179,10 @@ return [
         App\Providers\EventServiceProvider::class,
         App\Providers\RouteServiceProvider::class,
         Barryvdh\Debugbar\ServiceProvider::class,
+        App\Providers\InheritanceAwareProvider::class,
+        App\Providers\InheritanceProvider::class,
+        App\Providers\NoInheritanceAwareProvider::class,
+        App\Providers\NoInheritanceProvider::class,
     ],
 
     /*
