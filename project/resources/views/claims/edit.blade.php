@@ -73,6 +73,19 @@
                     </div>
                   </div>
                 </div>
+                  <div class="row">
+                      <label class="col-sm-2 col-form-label">{{ __('Professional') }}</label>
+                      <div class="col-sm-7">
+                          <div class="form-group{{ $errors->has('state') ? ' has-danger' : '' }}">
+                              <select class="form-control custom-select" data-style="btn btn-link" id="professional-select" name="professional">
+                                  <option value="">choose a professional</option>
+                                  @foreach($professionals as $professional)
+                                    <option value="{{ $professional->getIdentity() }}" @if($item->getProfessional() && $professional->getIdentity() === $item->getProfessional()->getIdentity())selected @endif>{{ $professional->getName() }}</option>
+                                  @endforeach
+                              </select>
+                          </div>
+                      </div>
+                  </div>
                 <div class="row">
                     <label class="col-sm-2 col-form-label">{{ __('Text') }}</label>
                     <div class="col-sm-7">

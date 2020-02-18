@@ -43,7 +43,7 @@ class FailedJobs
      *
      * @return int
      */
-    public function getId()
+    public function getIdentity()
     {
         return $this->id;
     }

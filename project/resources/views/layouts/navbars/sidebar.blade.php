@@ -17,6 +17,7 @@
                 <p>{{ __('Dashboard') }}</p>
             </a>
         </li>
+        @role('admin')
         <li class="nav-item {{ ($activePage == 'faq-management' || $activePage == 'faq-category-management') ? ' active' : '' }}">
             <a class="nav-link" data-toggle="collapse" href="#faqSubmenu" aria-expanded="true">
                 <i class="material-icons">help</i>
@@ -65,24 +66,27 @@
                 </ul>
             </div>
         </li>
+        @endrole
         <li class="nav-item{{ $activePage == 'profile' ? ' active' : '' }}">
             <a class="nav-link" href="{{ route('profile.edit') }}">
                 <i class="material-icons">account_box</i>
                 <p>{{ __('User profile') }}</p>
             </a>
         </li>
+        @role('admin')
         <li class="nav-item{{ $activePage == 'user-management' ? ' active' : '' }}">
             <a class="nav-link" href="/users">
                 <i class="material-icons">people</i>
                 <p>{{ __('User Management') }}</p>
             </a>
         </li>
-        <li class="nav-item{{ $activePage == 'roles' ? ' active' : '' }}">
-            <a class="nav-link" href="/roles">
-                <i class="material-icons">people</i>
-                <p>{{ __('Roles Management') }}</p>
-            </a>
-        </li>
+{{--        <li class="nav-item{{ $activePage == 'roles' ? ' active' : '' }}">--}}
+{{--            <a class="nav-link" href="/roles">--}}
+{{--                <i class="material-icons">people</i>--}}
+{{--                <p>{{ __('Roles Management') }}</p>--}}
+{{--            </a>--}}
+{{--        </li>--}}
+        @endrole
     </ul>
   </div>
 </div>

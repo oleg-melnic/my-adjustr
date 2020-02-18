@@ -50,7 +50,7 @@ a{
 }
 
 
-.fas { 
+.fas {
   font-family: FontAwesome;
 }
 
@@ -79,7 +79,7 @@ a{
 	border:  none;
     border-left: 2px solid #2d95e5;
     height: 10vh;
-    width: 2px;       
+    width: 2px;
 }
 
 .padding-settlement{
@@ -183,7 +183,7 @@ a{
 .form-join a{
         color: #000
 }
-    
+
 .form-join label{
         font-weight: bold;
         font-size: 16px;
@@ -284,7 +284,7 @@ a{
 .main-timeline:before{
     content: '';
     height: 90%;
-    border: 1px dashed #2d95e5; 
+    border: 1px dashed #2d95e5;
     transform: translateX(-50%);
     position: absolute;
     left: 50%;
@@ -301,7 +301,7 @@ a{
 
 .main-timeline .timeline::before{
     content: '';
-    border: 1px dashed #2d95e5; 
+    border: 1px dashed #2d95e5;
     width: 15%;
     position: absolute;
     right: 3px;
@@ -334,7 +334,7 @@ a{
 }
 .main-timeline .description{
     color: #000000;
-  
+
 }
 .main-timeline .timeline:nth-child(even){
     padding: 25px 25px 0 25px;
@@ -387,7 +387,7 @@ a{
 }
 
 #copyright{
-    background-color: black; 
+    background-color: black;
 }
 
 /*---------------END FOOTER AND COPYRIGHT--------------------*/
@@ -395,7 +395,7 @@ a{
 
 /*---------------START MEDIA FOR EXTRA SMALL DEVICES--------------------*/
 
-@media (max-width: 575.98px) { 
+@media (max-width: 575.98px) {
     .text-xs-center {
         text-align: center !important;
     }
@@ -413,9 +413,8 @@ a{
     }
 }
 
-@media (min-width: 575.98px) { 
+@media (min-width: 575.98px) {
     .contact-sm{
         margin-bottom: 0px;
     }
-   
 }

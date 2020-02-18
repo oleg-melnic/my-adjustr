@@ -11,6 +11,8 @@
 |
 */
 
+use App\Http\Middleware\AdminMiddleware as AdminMiddleware;
+
 Route::get('/', 'PagesController@index');
 Auth::routes();
 
@@ -85,6 +87,9 @@ Route::group(['middleware' => 'auth'], function () {
     Route::get('claims/edit/{itemId}', 'ClaimController@edit')
         ->where('itemId', '[0-9]+')
         ->name('claims-edit');
+    Route::get('claims/show/{itemId}', 'ClaimController@show')
+        ->where('itemId', '[0-9]+')
+        ->name('claims-show');
 });
 
 Route::group(['middleware' => 'auth'], function () {
@@ -122,19 +127,14 @@ Route::group([
 });
 
 // APP Routes Below
-Route::group([
-    'middleware' => 'web',
-//    'namespace' => 'jeremykenedy\laravelusers\app\Http\Controllers'
-], function () {
+Route::middleware(['middleware' => AdminMiddleware::class])->group(function () {
     Route::resource('users', 'UsersManagementController', [
         'names' => [
             'index'   => 'users',
             'destroy' => 'user.destroy',
+            'update' => 'users.update',
         ],
     ]);
-});
-
-Route::middleware(['web', 'auth'])->group(function () {
     Route::post('search-users', 'UsersManagementController@search')->name('search-users');
 
     Route::get('admin/faq', 'Admin\FaqController@index')->name('faq-management');

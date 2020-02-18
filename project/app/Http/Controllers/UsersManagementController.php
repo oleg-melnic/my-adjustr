@@ -2,6 +2,11 @@
 
 namespace App\Http\Controllers;
 
+use App\Entities\User\Admin;
+use App\Entities\User\Homeowner;
+use App\Entities\User\Professional;
+use App\Services\User\RoleService;
+use App\Services\User\UserService;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Auth;
@@ -9,6 +14,16 @@ use Illuminate\Support\Facades\Validator;
 
 class UsersManagementController extends Controller
 {
+    /**
+     * @var UserService
+     */
+    private $service;
+
+    /**
+     * @var RoleService
+     */
+    private $roleService;
+
     private $_authEnabled;
     private $_rolesEnabled;
     private $_rolesMiddlware;
@@ -17,10 +32,13 @@ class UsersManagementController extends Controller
     /**
      * Create a new controller instance.
      *
-     * @return void
+     * @param UserService $service
+     * @param RoleService $roleService
      */
-    public function __construct()
+    public function __construct(UserService $service, RoleService $roleService)
     {
+        $this->service = $service;
+        $this->roleService = $roleService;
         $this->_authEnabled = config('laravelusers.authEnabled');
         $this->_rolesEnabled = config('laravelusers.rolesEnabled');
         $this->_rolesMiddlware = config('laravelusers.rolesMiddlware');
@@ -84,15 +102,23 @@ class UsersManagementController extends Controller
      *
      * @param \Illuminate\Http\Request $request
      *
-     * @return \Illuminate\Http\Response
+     * @return \Illuminate\Http\RedirectResponse|Response
      *
      * @throws \Illuminate\Validation\ValidationException
+     * @throws \Exception
      */
     public function store(Request $request)
     {
+
+        $roleVsEntity = [
+            1 => Admin::class,
+            2 => Homeowner::class,
+            3 => Professional::class,
+        ];
+
         $rules = [
-            'name'                  => 'required|string|max:255|unique:users',
-            'email'                 => 'required|email|max:255|unique:users',
+            'name'                  => 'required|string|max:255',
+            'email'                 => 'required|email|max:255',
             'password'              => 'required|string|confirmed|min:6',
             'password_confirmation' => 'required|string|same:password',
         ];
@@ -112,22 +138,25 @@ class UsersManagementController extends Controller
             'role.required'       => trans('laravelusers::laravelusers.messages.roleRequired'),
         ];
 
-        $validator = $this->validate($request, $rules, $messages);
-vred($validator);
+        $validator = Validator::make($request->all(), $rules, $messages);
+
         if ($validator->fails()) {
             return back()->withErrors($validator)->withInput();
         }
 
-        $user = config('laravelusers.defaultUserModel')::create([
-            'name'             => $request->input('name'),
-            'email'            => $request->input('email'),
-            'password'         => bcrypt($request->input('password')),
-        ]);
+        $roleVsType = [
+            1 => 'admin',
+            2 => 'homeowner',
+            3 => 'professional',
+        ];
 
-        if ($this->_rolesEnabled) {
-            $user->attachRole($request->input('role'));
-            $user->save();
-        }
+        $this->service->createNew([
+            'role' => $request->input('role'),
+            'type' => $roleVsType[$request->input('role')],
+            'name' => $request->input('name'),
+            'email' => $request->input('email'),
+            'password' => bcrypt($request->input('password')),
+        ]);
 
         return redirect('users')->with('success', trans('laravelusers::laravelusers.messages.user-creation-success'));
     }
@@ -155,27 +184,13 @@ vred($validator);
      */
     public function edit($id)
     {
-        $user = config('laravelusers.defaultUserModel')::findOrFail($id);
-        $roles = [];
-        $currentRole = '';
-
-        if ($this->_rolesEnabled) {
-            $roles = config('laravelusers.roleModel')::all();
-
-            foreach ($user->roles as $user_role) {
-                $currentRole = $user_role;
-            }
-        }
-
+        $user = $this->service->get($id);
         $data = [
             'user'          => $user,
             'rolesEnabled'  => $this->_rolesEnabled,
+            'roles' => $this->roleService->getList(),
+            'currentRole' => $user['type'],
         ];
-
-        if ($this->_rolesEnabled) {
-            $data['roles'] = $roles;
-            $data['currentRole'] = $currentRole;
-        }
 
         return view(config('laravelusers.editIndividualUserBlade'))->with($data);
     }
@@ -227,11 +242,12 @@ vred($validator);
             $user->password = bcrypt($request->input('password'));
         }
 
-        if ($this->_rolesEnabled) {
-            $user->detachAllRoles();
-            $user->attachRole($request->input('role'));
+        if ($request->has('type')) {
+            $user->type = $request->input('type');
         }
 
+        $user->detachAllRoles();
+        $user->attachRole($request->input('role'));
         $user->save();
 
         return back()->with('success', trans('laravelusers::laravelusers.messages.update-user-success'));

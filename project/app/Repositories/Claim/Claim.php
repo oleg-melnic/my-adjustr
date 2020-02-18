@@ -1,12 +1,12 @@
 <?php
 
-namespace App\Repositories;
+namespace App\Repositories\Claim;
 
 use App\Repositories\Exception\DeletionFailed;
 use Doctrine\ORM\EntityRepository;
 use LaravelDoctrine\ORM\Pagination\PaginatesFromRequest;
 
-class Users extends EntityRepository
+class Claim extends EntityRepository
 {
     use PaginatesFromRequest;
 
@@ -15,8 +15,7 @@ class Users extends EntityRepository
      */
     public function findAll()
     {
-        $queryBuilder = $this->createQueryBuilder('q')
-            ->orderBy('q.position', 'ASC');
+        $queryBuilder = $this->createQueryBuilder('q');
 
         return $queryBuilder->getQuery()->getResult();
     }

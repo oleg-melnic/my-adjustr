@@ -1,7 +1,7 @@
 @extends('layouts.app', ['activePage' => 'user-management', 'titlePage' => __('Edit User Management')])
 
 @section('template_title')
-    {!! trans('laravelusers::laravelusers.editing-user', ['name' => $user->name]) !!}
+    {!! trans('laravelusers::laravelusers.editing-user', ['name' => $user['name']]) !!}
 @endsection
 
 <link rel="stylesheet" type="text/css" href="https://use.fontawesome.com/releases/v5.0.6/css/all.css">
@@ -28,7 +28,7 @@
                 <div class="card">
                     <div class="card-header">
                         <div style="display: flex; justify-content: space-between; align-items: center;">
-                            {!! trans('laravelusers::laravelusers.editing-user', ['name' => $user->name]) !!}
+                            {!! trans('laravelusers::laravelusers.editing-user', ['name' => $user['name']]) !!}
                             <div class="pull-right">
                                 <a href="{{ route('users') }}" class="btn btn-light btn-sm float-right" data-toggle="tooltip" data-placement="top" title="{!! trans('laravelusers::laravelusers.tooltips.back-users') !!}">
                                     @if(config('laravelusers.fontAwesomeEnabled'))
@@ -36,7 +36,7 @@
                                     @endif
                                     {!! trans('laravelusers::laravelusers.buttons.back-to-users') !!}
                                 </a>
-                                <a href="{{ url('/users/' . $user->id) }}" class="btn btn-light btn-sm float-right" data-toggle="tooltip" data-placement="left" title="{!! trans('laravelusers::laravelusers.tooltips.back-users') !!}">
+                                <a href="{{ url('/users/' . $user['id']) }}" class="btn btn-light btn-sm float-right" data-toggle="tooltip" data-placement="left" title="{!! trans('laravelusers::laravelusers.tooltips.back-users') !!}">
                                     @if(config('laravelusers.fontAwesomeEnabled'))
                                         <i class="fas fa-fw fa-reply" aria-hidden="true"></i>
                                     @endif
@@ -46,7 +46,7 @@
                         </div>
                     </div>
                     <div class="card-body">
-                        {!! Form::open(array('route' => ['users.update', $user->id], 'method' => 'PUT', 'role' => 'form', 'class' => 'needs-validation')) !!}
+                        {!! Form::open(array('route' => ['users.update', $user['id']], 'method' => 'PUT', 'role' => 'form', 'class' => 'needs-validation')) !!}
                             {!! csrf_field() !!}
                             <div class="form-group has-feedback row {{ $errors->has('name') ? ' has-error ' : '' }}">
                                 @if(config('laravelusers.fontAwesomeEnabled'))
@@ -54,7 +54,7 @@
                                 @endif
                                 <div class="col-md-12">
                                     <div class="input-group">
-                                        {!! Form::text('name', $user->name, array('id' => 'name', 'class' => 'form-control', 'placeholder' => trans('laravelusers::forms.create_user_ph_username'))) !!}
+                                        {!! Form::text('name', $user['name'], array('id' => 'name', 'class' => 'form-control', 'placeholder' => trans('laravelusers::forms.create_user_ph_username'))) !!}
                                         <div class="input-group-append">
                                             <label class="input-group-text" for="name">
                                                 @if(config('laravelusers.fontAwesomeEnabled'))
@@ -78,7 +78,7 @@
                                 @endif
                                 <div class="col-md-12">
                                     <div class="input-group">
-                                        {!! Form::text('email', $user->email, array('id' => 'email', 'class' => 'form-control', 'placeholder' => trans('laravelusers::forms.create_user_ph_email'))) !!}
+                                        {!! Form::text('email', $user['email'], array('id' => 'email', 'class' => 'form-control', 'placeholder' => trans('laravelusers::forms.create_user_ph_email'))) !!}
                                         <div class="input-group-append">
                                             <label for="email" class="input-group-text">
                                                 @if(config('laravelusers.fontAwesomeEnabled'))
@@ -96,25 +96,25 @@
                                     @endif
                                 </div>
                             </div>
-                            @if($rolesEnabled)
                                 <div class="form-group has-feedback row bmd-form-group is-filled {{ $errors->has('role') ? ' has-error ' : '' }}">
                                     @if(config('laravelusers.fontAwesomeEnabled'))
                                         {!! Form::label('role', trans('laravelusers::forms.create_user_label_role'), array('class' => 'col-md-3 control-label')); !!}
                                     @endif
                                     <div class="col-md-12">
                                         <div class="input-group">
-                                            <select class="custom-select form-control" name="role" id="role">
+                                            <select class="custom-select form-control" name="type" id="type">
                                                 <option value="">{!! trans('laravelusers::forms.create_user_ph_role') !!}</option>
                                                 @if ($roles)
                                                     @foreach($roles as $role)
                                                         @if ($currentRole)
-                                                            <option value="{{ $role->id }}" {{ $currentRole->id == $role->id ? 'selected="selected"' : '' }}>{{ $role->name }}</option>
+                                                            <option value="{{ $role->getSlug() }}" data-content="{{ $role->getIdentity() }}" {{ $currentRole == $role->getSlug() ? 'selected="selected"' : '' }}>{{ $role->getName() }}</option>
                                                         @else
-                                                            <option value="{{ $role->id }}">{{ $role->name }}</option>
+                                                            <option value="{{ $role->getSlug() }}" data-content="{{ $role->getIdentity() }}">{{ $role->getName() }}</option>
                                                         @endif
                                                     @endforeach
                                                 @endif
                                             </select>
+                                            <input type="hidden" id="role" name="role">
                                             <div class="input-group-append">
                                                 <label class="input-group-text" for="role">
                                                     @if(config('laravelusers.fontAwesomeEnabled'))
@@ -132,7 +132,6 @@
                                         @endif
                                     </div>
                                 </div>
-                            @endif
                             <div class="pw-change-container">
                                 <div class="form-group has-feedback row {{ $errors->has('password') ? ' has-error ' : '' }}">
                                     @if(config('laravelusers.fontAwesomeEnabled'))
@@ -211,6 +210,12 @@
     {{-- Confirm Save Modal --}}
 
     <script type="text/javascript">
+
+        $('#type').change(function (e) {
+            var selected = $(this).find('option:selected');
+            var extra = selected.data('content');
+            $('#role').val(extra);
+        });
 
         $('#confirmSave').on('show.bs.modal', function (e) {
             var message = $(e.relatedTarget).attr('data-message');

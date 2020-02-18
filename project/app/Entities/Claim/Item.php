@@ -2,14 +2,15 @@
 
 namespace App\Entities\Claim;
 
-use App\Entities\Users;
+use App\Entities\User\Professional;
+use App\Entities\User\UserAbstract;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
  * Question
  *
  * @ORM\Table(name="claims")
- * @ORM\Entity(repositoryClass="App\Repositories\Claim")
+ * @ORM\Entity(repositoryClass="App\Repositories\Claim\Claim")
  */
 class Item
 {
@@ -58,12 +59,20 @@ class Item
     protected $text;
 
     /**
-     * @var Users
+     * @var UserAbstract
      *
-     * @ORM\ManyToOne(targetEntity="App\Entities\Users")
+     * @ORM\ManyToOne(targetEntity="App\Entities\User\UserAbstract")
      * @ORM\JoinColumn(name="user_id", referencedColumnName="id", nullable=false)
      */
     private $user;
+
+    /**
+     * @var Professional|null
+     *
+     * @ORM\ManyToOne(targetEntity="App\Entities\User\Professional")
+     * @ORM\JoinColumn(name="prof_id", referencedColumnName="id", nullable=true)
+     */
+    private $professional;
 
     /**
      * @var State
@@ -209,19 +218,19 @@ class Item
     }
 
     /**
-     * @return Users
+     * @return UserAbstract
      */
-    public function getUser(): Users
+    public function getUser(): UserAbstract
     {
         return $this->user;
     }
 
     /**
-     * @param Users $user
+     * @param UserAbstract $user
      *
      * @return Item
      */
-    public function setUser(Users $user): Item
+    public function setUser(UserAbstract $user): Item
     {
         $this->user = $user;
 
@@ -242,6 +251,26 @@ class Item
     public function setZipcode($zipcode): Item
     {
         $this->zipcode = $zipcode;
+
+        return $this;
+    }
+
+    /**
+     * @return Professional|null
+     */
+    public function getProfessional(): ?Professional
+    {
+        return $this->professional;
+    }
+
+    /**
+     * @param Professional|null $professional
+     *
+     * @return Item
+     */
+    public function setProfessional(?Professional $professional): Item
+    {
+        $this->professional = $professional;
 
         return $this;
     }

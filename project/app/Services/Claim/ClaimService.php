@@ -1,33 +1,48 @@
 <?php
 
-namespace App\Services;
+namespace App\Services\Claim;
 
+use App\Crud\Inheritance\Inheritance;
+use App\Crud\InheritanceAwareInterface;
+use App\Crud\InheritanceAwareTrait;
 use App\Entities\Claim\Item as Claim;
 use App\Entities\Claim\State;
-use App\Entities\Users;
-use App\Repositories\Claim as ClaimRepository;
+use App\Entities\User\UserAbstract;
+use App\Repositories\Claim\Claim as ClaimRepository;
 use App\Repositories\Exception\EntityNotFound;
+use App\Services\Claim\Strategy\Admin;
+use App\Services\Claim\Strategy\Homeowner;
+use App\Services\Claim\Strategy\Professional;
+use App\Services\User\UserService;
 use Illuminate\Http\Request;
 use Illuminate\Pagination\LengthAwarePaginator;
 use Illuminate\Support\Facades\Auth;
 use LaravelDoctrine\ORM\Facades\EntityManager;
 
-class ClaimService
+/**
+ * Class ClaimService
+ *
+ * @package App\Services\Claim
+ * @method Inheritance getInheritanceResolver()
+ */
+class ClaimService implements InheritanceAwareInterface
 {
+    use InheritanceAwareTrait;
+
     /**
      * @var ClaimRepository
      */
     private $repository;
 
     /**
-     * @var UsersService
+     * @var UserService
      */
     private $userService;
 
     public function __construct()
     {
         $this->repository = EntityManager::getRepository(Claim::class);
-        $this->userService = app(UsersService::class);
+        $this->userService = app(UserService::class);
     }
 
     /**
@@ -46,7 +61,10 @@ class ClaimService
      */
     public function getList($perPage = 15, $pageName = 'page')
     {
-        return $this->repository->paginateAllItems($perPage, $pageName);
+        /** @var \App\Services\Claim\Strategy\ClaimAbstract $strategy */
+        $strategy = $this->getInheritanceResolver()->getStrategy(Auth::user()->type);
+
+        return $strategy->getAll($perPage, $pageName);
     }
 
     /**
@@ -74,8 +92,8 @@ class ClaimService
      */
     public function create(Request $request)
     {
-        /** @var Users $user */
-        $user = $this->userService->get(Auth::id());
+        /** @var UserAbstract $user */
+        $user = $this->userService->find(Auth::id());
         $user->setSubscription($request->get('subscription', 0));
 
         $entity = $this->createEmptyEntity();
@@ -110,6 +128,12 @@ class ClaimService
             );
         }
 
+        if ($request->has('professional')) {
+            $entity->setProfessional(
+                $this->userService->find($request->get('professional'))
+            );
+        }
+
         $entity->setZipcode($request->get('zipcode'))
             ->setProvider($request->get('provider'))
             ->setProperty($request->get('property'))
@@ -121,5 +145,33 @@ class ClaimService
         EntityManager::flush();
 
         return $entity;
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function getDiscriminatorName()
+    {
+        return 'type';
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function getServicesNames()
+    {
+        return [
+            UserService::TYPE_ADMIN => Admin::class,
+            UserService::TYPE_HOMEOWNER => Homeowner::class,
+            UserService::TYPE_PROFESSIONAL => Professional::class,
+        ];
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function getBaseEntityName()
+    {
+        return Claim::class;
     }
 }

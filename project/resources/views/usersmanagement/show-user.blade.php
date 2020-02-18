@@ -103,57 +103,27 @@
                                     </div>
                                 </li>
                             @endif
-                            @if(config('laravelusers.rolesEnabled'))
-                                <li class="list-group-item">
-                                    <div class="row">
-                                        <div class="col-4 col-sm-3">
-                                            <strong>
-                                                {{ trans('laravelusers::laravelusers.show-user.labelRole') }}
-                                            </strong>
-                                        </div>
-                                        <div class="col-8 col-sm-9">
-                                            @foreach ($user->roles as $user_role)
-                                                @if ($user_role->name == 'User')
-                                                    @php $labelClass = 'primary' @endphp
-                                                @elseif ($user_role->name == 'Admin')
-                                                    @php $labelClass = 'warning' @endphp
-                                                @elseif ($user_role->name == 'Unverified')
-                                                    @php $labelClass = 'danger' @endphp
-                                                @else
-                                                    @php $labelClass = 'default' @endphp
-                                                @endif
-                                                <span class="badge badge-{{$labelClass}}">{{ $user_role->name }}</span>
-                                            @endforeach
-                                        </div>
+                            <li class="list-group-item">
+                                <div class="row">
+                                    <div class="col-4 col-sm-3">
+                                        <strong>
+                                            {{ trans('laravelusers::laravelusers.show-user.labelRole') }}
+                                        </strong>
                                     </div>
-                                </li>
-                                <li class="list-group-item">
-                                    <div class="row">
-                                        <div class="col-12 col-sm-3">
-                                            <strong>
-                                                {!! trans_choice('laravelusers::laravelusers.show-user.labelAccessLevel', 1) !!}
-                                            </strong>
-                                        </div>
-                                        <div class="col-12 col-sm-9">
-                                            @if($user->level() >= 5)
-                                                <span class="badge badge-primary margin-half margin-left-0">5</span>
+                                    <div class="col-8 col-sm-9">
+                                            @if ($user->type === 'homewowner')
+                                                @php $labelClass = 'primary' @endphp
+                                            @elseif ($user->type == 'admin')
+                                                @php $labelClass = 'warning' @endphp
+                                            @elseif ($user->type == 'professional')
+                                                @php $labelClass = 'danger' @endphp
+                                            @else
+                                                @php $labelClass = 'default' @endphp
                                             @endif
-                                            @if($user->level() >= 4)
-                                                <span class="badge badge-info margin-half margin-left-0">4</span>
-                                            @endif
-                                            @if($user->level() >= 3)
-                                                <span class="badge badge-success margin-half margin-left-0">3</span>
-                                            @endif
-                                            @if($user->level() >= 2)
-                                                <span class="badge badge-warning margin-half margin-left-0">2</span>
-                                            @endif
-                                            @if($user->level() >= 1)
-                                                <span class="badge badge-default margin-half margin-left-0">1</span>
-                                            @endif
-                                        </div>
+                                            <span class="badge badge-{{$labelClass}}">{{ $user->type }}</span>
                                     </div>
-                                </li>
-                            @endif
+                                </div>
+                            </li>
                             @if ($user->created_at)
                                 <li class="list-group-item">
                                     <div class="row">

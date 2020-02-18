@@ -90,6 +90,7 @@
                                         @if(config('laravelusers.rolesEnabled'))
                                             <th class="hidden-sm hidden-xs">{!! trans('laravelusers::laravelusers.users-table.role') !!}</th>
                                         @endif
+                                        <th class="hidden-sm hidden-xs hidden-md">Type</th>
                                         <th class="hidden-sm hidden-xs hidden-md">{!! trans('laravelusers::laravelusers.users-table.created') !!}</th>
                                         <th class="hidden-sm hidden-xs hidden-md">{!! trans('laravelusers::laravelusers.users-table.updated') !!}</th>
                                         <th class="no-search no-sort">{!! trans('laravelusers::laravelusers.users-table.actions') !!}</th>
@@ -106,11 +107,11 @@
                                             @if(config('laravelusers.rolesEnabled'))
                                                 <td class="hidden-sm hidden-xs">
                                                     @foreach ($user->roles as $user_role)
-                                                        @if ($user_role->name == 'User')
+                                                        @if ($user_role->name == 'Homeowner')
                                                             @php $badgeClass = 'primary' @endphp
                                                         @elseif ($user_role->name == 'Admin')
                                                             @php $badgeClass = 'warning' @endphp
-                                                        @elseif ($user_role->name == 'Unverified')
+                                                        @elseif ($user_role->name == 'Professional')
                                                             @php $badgeClass = 'danger' @endphp
                                                         @else
                                                             @php $badgeClass = 'dark' @endphp
@@ -119,6 +120,7 @@
                                                     @endforeach
                                                 </td>
                                             @endif
+                                            <td class="hidden-sm hidden-xs hidden-md">{{$user->type}}</td>
                                             <td class="hidden-sm hidden-xs hidden-md">{{$user->created_at}}</td>
                                             <td class="hidden-sm hidden-xs hidden-md">{{$user->updated_at}}</td>
                                             <td>
