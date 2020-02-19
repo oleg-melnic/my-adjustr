@@ -13,6 +13,7 @@ use App\Crud\Helper\UpdateTrait;
 use App\Crud\NoInheritanceAwareInterface;
 use App\Crud\NoInheritanceAwareTrait;
 use App\Entities\User\Role;
+use Carbon\Carbon;
 use LaravelDoctrine\ORM\Facades\EntityManager;
 
 /**
@@ -54,9 +55,16 @@ abstract class UserAbstract implements
         $context['identity'] = '';
         try {
             $roleRepository = EntityManager::getRepository(Role::class);
-            $data['role'] = $roleRepository->find(array_get($data, 'role'));
+            /** @var Role $role */
+            $role = $roleRepository->find(array_get($data, 'role'));
+            unset($data['role']);
             /** @var \App\Entities\User\UserAbstract $entity */
             $entity = $this->getInheritanceResolver()->create($data, $flush, $context, $permission);
+            $now = Carbon::now();
+            $entity->addRole($role)
+                ->setCreatedAt($now)
+                ->setUpdatedAt($now);
+            EntityManager::flush();
             EntityManager::commit();
         } catch (\Exception $exception) {
             EntityManager::rollback();
