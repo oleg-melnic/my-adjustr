@@ -510,7 +510,7 @@
                                                         <p class="text-center"><button type="submit" class="btn btn-primary">{{ __('Submit') }}</button></p>
                                                         <div class="form-check text-center">
                                                             <label class="form-check-label">
-                                                                <input name="subscription" class="form-check-input" type="checkbox" value="">
+                                                                <input name="subscription" class="form-check-input" type="checkbox" value="1">
                                                                 Click to have myadjustr recommend you the best professionals
                                                                 <span class="form-check-sign">
                                                                     <span class="check"></span>
