@@ -7,6 +7,7 @@ use App\Entities\User\Homeowner;
 use App\Entities\User\Professional;
 use App\Services\User\RoleService;
 use App\Services\User\UserService;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Auth;
@@ -109,7 +110,6 @@ class UsersManagementController extends Controller
      */
     public function store(Request $request)
     {
-
         $roleVsEntity = [
             1 => Admin::class,
             2 => Homeowner::class,
@@ -145,9 +145,9 @@ class UsersManagementController extends Controller
         }
 
         $roleVsType = [
-            1 => 'admin',
-            2 => 'homeowner',
-            3 => 'professional',
+            1 => UserService::TYPE_ADMIN,
+            2 => UserService::TYPE_HOMEOWNER,
+            3 => UserService::TYPE_PROFESSIONAL,
         ];
 
         $this->service->createNew([
@@ -233,6 +233,7 @@ class UsersManagementController extends Controller
         }
 
         $user->name = $request->input('name');
+        $user->updated_at = Carbon::now();
 
         if ($emailCheck) {
             $user->email = $request->input('email');

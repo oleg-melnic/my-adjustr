@@ -2,6 +2,8 @@
 
 namespace App\Entities\User;
 
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
@@ -26,7 +28,6 @@ use Illuminate\Notifications\Notifiable;
 abstract class UserAbstract extends Authenticatable
 {
     use Notifiable;
-    use HasRoleAndPermission;
 
     /**
      * @var integer
@@ -94,14 +95,25 @@ abstract class UserAbstract extends Authenticatable
     private $subscription;
 
     /**
-     * @var Role
+     * @var Collection|Role[]
      * @ORM\ManyToMany(targetEntity="Role")
      * @ORM\JoinTable(name="role_user",
-     *      joinColumns={@ORM\JoinColumn(name="user_id", referencedColumnName="id")},
+     *      joinColumns={@ORM\JoinColumn(name="user_id", referencedColumnName="id", onDelete="CASCADE")},
      *      inverseJoinColumns={@ORM\JoinColumn(name="role_id", referencedColumnName="id")}
      * )
      */
-    private $role;
+    private $roles;
+
+    /**
+     * UserAbstract constructor.
+     *
+     * @param array $attributes
+     */
+    public function __construct($attributes = [])
+    {
+        parent::__construct($attributes);
+        $this->roles = new ArrayCollection();
+    }
 
     /**
      * Get id.
@@ -302,22 +314,32 @@ abstract class UserAbstract extends Authenticatable
     }
 
     /**
-     * @return mixed
+     * @return Role[]|ArrayCollection|Collection
      */
-    public function getRole()
+    public function getRoles()
     {
-        return $this->role;
+        return $this->roles;
     }
 
     /**
-     * @param mixed $role
+     * @param Role $role
      *
      * @return UserAbstract
      */
-    public function setRole($role): UserAbstract
+    public function addRole(Role $role)
     {
-        $this->role = $role;
+        $this->roles->add($role);
 
         return $this;
+    }
+
+    /**
+     * @param Role $role
+     */
+    public function removeRole(Role $role)
+    {
+        if ($this->role->contains($role)) {
+            $this->role->removeElement($role);
+        }
     }
 }
