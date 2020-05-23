@@ -18,6 +18,10 @@ Auth::routes();
 
 Route::get('/home', 'HomeController@index')->name('home')->middleware('auth');
 
+Route::get('/faq', 'FaqController@index')->name('faq');
+
+Route::get('/faq/{category}', 'FaqController@category')->name('faq-category');
+
 Route::get('/about', function () {
     return view('pages.about');
 })->name('about');

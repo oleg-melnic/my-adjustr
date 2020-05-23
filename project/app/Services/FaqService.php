@@ -2,11 +2,11 @@
 
 namespace App\Services;
 
+use App\Entities\Faq\Category;
 use App\Entities\Faq\Question as QuestionEntity;
 use App\Repositories\Exception\EntityNotFound;
 use App\Repositories\Faq\Question;
 use Illuminate\Http\Request;
-use Illuminate\Pagination\LengthAwarePaginator;
 use LaravelDoctrine\ORM\Facades\EntityManager;
 
 class FaqService
@@ -36,14 +36,32 @@ class FaqService
     }
 
     /**
-     * @param int $perPage
-     * @param string $pageName
-     *
-     * @return LengthAwarePaginator
+     * @return array
      */
-    public function getList($perPage = 15, $pageName = 'page')
+    public function getList()
     {
-        return $this->repository->paginateAllItems($perPage, $pageName);
+        $result = [];
+
+        /** @var Category $category */
+        foreach ($this->categoryService->getList() as $category) {
+            $result[$category->getIdentity()] = [
+                'title' => $category->getTitle(),
+                'alias' => $category->getAlias(),
+                'items' => $this->repository->findBy(['category' => $category]),
+            ];
+        }
+
+        return $result;
+    }
+
+    /**
+     * @param Category $category
+     *
+     * @return array|object[]
+     */
+    public function getByCategory(Category $category)
+    {
+        return $this->repository->findBy(['category' => $category]);
     }
 
     /**
