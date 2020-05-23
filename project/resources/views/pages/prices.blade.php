@@ -40,7 +40,7 @@
             </div>
             <div class="row text-center mt-3">
                 <div class="col">
-                    <button type="button" onclick="window.location='{{ route('register') }}'" class="btn btn-primary">Join Us</button>
+                    <button type="button" onclick="window.location='{{ route('register') }}'; return false;" class="btn btn-primary">Join Us</button>
                 </div>
             </div>
         </div>

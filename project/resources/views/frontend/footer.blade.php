@@ -4,7 +4,7 @@
             <div class="col col-xs-12">
                 <ul class="list-unstyled">
                     <li>
-                        <img src="images/logo.png" height="50">
+                        <img src="/images/logo.png" height="50">
                     </li>
                     <li>
                         <a href="{{ route('about') }}">About</a>
@@ -66,13 +66,13 @@
             <div class="col">
                 <ul class="list-inline">
                     <li class="list-inline-item">
-                        <img src="images/facebook.svg" height="30">
+                        <img src="/images/facebook.svg" height="30">
                     </li>
                     <li class="list-inline-item">
-                        <img src="images/instagram.svg" height="30">
+                        <img src="/images/instagram.svg" height="30">
                     </li>
                     <li class="list-inline-item">
-                        <img src="images/twitter.svg" height="30">
+                        <img src="/images/twitter.svg" height="30">
                     </li>
                 </ul>
             </div>

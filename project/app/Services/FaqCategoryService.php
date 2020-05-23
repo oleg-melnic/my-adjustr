@@ -50,6 +50,18 @@ class FaqCategoryService
     }
 
     /**
+     * @param string $alias
+     *
+     * @return Category|object|null
+     *
+     * @throws \Doctrine\ORM\NonUniqueResultException
+     */
+    public function getByAlias($alias)
+    {
+        return $this->repository->findOneByAlias($alias);
+    }
+
+    /**
      * @param int $categoryId
      */
     public function delete($categoryId)

@@ -338,8 +338,8 @@ abstract class UserAbstract extends Authenticatable
      */
     public function removeRole(Role $role)
     {
-        if ($this->role->contains($role)) {
-            $this->role->removeElement($role);
+        if ($this->roles->contains($role)) {
+            $this->roles->removeElement($role);
         }
     }
 }
