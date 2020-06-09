@@ -15,7 +15,7 @@
             </div>
             <div class="row justify-content-center">
                 <div class="col-md-4  col-sm-12 text-center">
-                    <button type="button" class="btn btn-primary">Get Started</button>
+                    <button type="button" onclick="window.location='{{ route('register') }}'" class="btn btn-primary">Get Started</button>
                 </div>
             </div>
         </div>
