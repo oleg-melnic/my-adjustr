@@ -90,7 +90,7 @@
                     <div class="text-center">
                         <img class="mh170 img-fluid" src="images/undraw_find-professional.svg">
                         <p class="mt-2 fs16 font-weight-bold">Find a professional<br>online</p>
-                        <button type="button" class="btn btn-primary">Get Started</button>
+                        <button type="button" onclick="window.location='{{ route('register') }}'" class="btn btn-primary">Get Started</button>
                     </div>
                 </div>
                 <div class="col-md-2 mb-5">
